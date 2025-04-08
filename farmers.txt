@@ -1,0 +1,60 @@
+import mysql.connector
+import requests
+import json
+from PIL import Image
+import bcrypt
+import os
+import re
+db = mysql.connector.connect(
+   host= "localhost",
+   user = "root",
+   password = "Omosh2021@",
+   database = "Farmers_management_system"
+)
+print("Connected Successfuly!")
+raw_password = "Omosh2021@"
+hashed_pasword= bcrypt.hashpw(raw_password.encode('utf-8'), bcrypt.gensalt())
+
+   
+def get_farmer():
+    farmer = {"first_name":input("Enter first_name" ).strip().title(),
+    "last_name":input("Enter last_name" ).strip().title(),
+    "email": input("Enter email" ).strip().lower(),
+    "phone":int(input("Enter your phone number" )),
+    "location":input("Enter your location" ).strip()}
+    return farmer
+
+def insert_farmer(farmer):
+    cursor = db.cursor()
+    sql = "INSERT INTO farmer(first_name, last_name, email, phone, location)VALUES (%s, %s, %s, %s, %s)"
+    values = (farmer['first_name'],
+        farmer['last_name'],
+        farmer['email'],
+        farmer['phone'],
+        farmer['location'])
+    cursor.execute(sql,values)
+    db.commit()
+    print("Farmer added successfully!")
+def get_supplier():
+    supplier = {"supplier_name": input("Enter your first and last name ").strip().title(),
+    "phone_number": input("Enter your phone number ").strip(),
+    "email": input("Enter your email ").strip().lower(),
+    "location": input("Enter your location").strip()}
+    return supplier
+def insert_supplier(supplier):
+    cursor = db.cursor()
+    sql = "INSERT INTO supplier (supplier_name, phone_number, email, location) VALUES(%s, %s, %s, %s)"
+    values= (supplier['supplier_name'], supplier['phone_number'], supplier['email'], supplier['location'])
+    cursor.execute(sql, values)
+    db.commit()
+    print("Supplier added successfully!")
+def main():
+    #data= get_farmer()
+    #insert_farmer(data)
+    info = get_supplier()
+    insert_supplier(info)
+if __name__=="__main__":
+    main()
+
+
+
